@@ -1,0 +1,61 @@
+database : rxjava_study
+
+
+
+Create table UserInfo (
+	userCode int auto_increment,
+	userId varchar(20) not null,
+	userPwd varchar(20) not null,
+	userName varchar(20) not null,
+	primary key(userCode)
+);
+
+
+
+Create table ItemInfo (
+	itemCode int auto_increment,
+	groupCode int not null,
+	itemName varchar(50) not null,
+	itemPrice int not null,
+	primary key(itemCode)
+);
+
+Create table ItemGroup (
+	groupCode int auto_increment,
+	groupBig int not null,
+	groupMiddle int not null,
+	groupSmall int not null,
+	groupName varchar(20) not null,
+	primary key(groupCode)
+);
+
+Create table OrderInfo (
+	orderCode int auto_increment,
+	userCode int not null,
+	itemCode int not null,
+	itemName varchar(50) not null,
+	discountPrice int not null,
+	payPrice int not null,
+	orderDate DateTime not null,
+	orderState char(1) not null,
+	invoiceNumber varchar(20),
+	primary key(orderCode)	
+);
+
+Create table Board (
+	commentCode int auto_increment,
+	itemCode int not null,
+	userCode int not null,
+	writeDate DateTime not null,
+	writePwd varchar(4) not null,
+	content varchar(200) not null,
+	paymentCode int not null,
+	primary key(commentCode)
+);
+
+
+Insert into UserInfo (userId, userPwd, userName) value('admin', '1234', '관리자');
+Insert into ItemGroup (groupBig, groupMiddle, groupSmall, groupName) value(1, 0, 0, '의류');
+Insert into ItemGroup (groupBig, groupMiddle, groupSmall, groupName) value(1, 1, 0, '상의');
+Insert into ItemGroup (groupBig, groupMiddle, groupSmall, groupName) value(1, 1, 1, '블라우스');
+Insert into ItemGroup (groupBig, groupMiddle, groupSmall, groupName) value(1, 2, 0, '하의');
