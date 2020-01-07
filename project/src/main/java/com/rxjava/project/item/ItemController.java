@@ -1,11 +1,9 @@
-package com.rxjava.project.itemGroup;
+package com.rxjava.project.item;
 
-import com.rxjava.project.util.ErrorHandler;
 import com.rxjava.project.util.ResultDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,22 +12,22 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/group")
-public class ItemGroupController extends ErrorHandler {
+@RequestMapping(value = "/item")
+public class ItemController {
 
     @Autowired
-    ItemGroupService service;
+    ItemService service;
 
-    @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public ResponseEntity findAll() {
 
-        List<ItemGroup> groupList = service.findAll();
+    @RequestMapping(value = "/select", method = RequestMethod.GET)
+    public ResponseEntity findAll(@RequestParam("groupLevel") String groupLevel,
+                                  @RequestParam("groupKey") int groupKey) {
+
+        List<Item> itemList = service.findItem(groupLevel, groupKey);
         ResultDto resultDto = new ResultDto();
         resultDto.setStatus(200);
-        resultDto.setMessage("상품 그룹 조회 성공");
-        resultDto.setData(groupList);
+        resultDto.setMessage("상품 목록 조회 성공");
+        resultDto.setData(itemList);
         return new ResponseEntity(resultDto, HttpStatus.OK);
     }
-
-
 }
