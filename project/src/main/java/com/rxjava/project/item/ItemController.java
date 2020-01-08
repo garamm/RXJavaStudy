@@ -20,14 +20,14 @@ public class ItemController {
 
 
     @RequestMapping(value = "/select", method = RequestMethod.GET)
-    public ResponseEntity findAll(@RequestParam("groupLevel") String groupLevel,
-                                  @RequestParam("groupKey") int groupKey) {
+    public ResponseEntity findAll(@RequestParam("groupKey") int groupKey) {
 
-        List<Item> itemList = service.findItem(groupLevel, groupKey);
+        List<Item> itemList = service.findItem(groupKey);
         ResultDto resultDto = new ResultDto();
         resultDto.setStatus(200);
         resultDto.setMessage("상품 목록 조회 성공");
         resultDto.setData(itemList);
         return new ResponseEntity(resultDto, HttpStatus.OK);
+
     }
 }

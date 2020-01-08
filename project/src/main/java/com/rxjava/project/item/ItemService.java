@@ -13,8 +13,8 @@ public class ItemService {
     @Autowired
     ItemRepository repository;
 
-    List<Item> findItem(String groupLevel, int groupKey) {
-        return repository.findItem(groupLevel, groupKey);
+    List<Item> findItem(int groupKey) {
+        return repository.findItem(groupKey);
     }
 
 }

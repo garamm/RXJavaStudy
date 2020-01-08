@@ -17,21 +17,14 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
     }
 
     @Override
-    public List<Item> findItem(String groupLevel, int groupKey) {
+    public List<Item> findItem(int groupKey) {
 
         QItem pr = QItem.item;
         JPQLQuery jpqlQuery = from(pr);
+        jpqlQuery.where(
+                pr.groupCode.eq(groupKey)
+        );
 
-        switch (groupLevel) {
-            case "big":
-                break;
-            case "middle":
-                break;
-            case "small":
-                break;
-            default:
-                break;
-        }
-        return null;
+        return jpqlQuery.fetch();
     }
 }

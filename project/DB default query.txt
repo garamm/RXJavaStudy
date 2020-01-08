@@ -59,3 +59,9 @@ Insert into ItemGroup (groupBig, groupMiddle, groupSmall, groupName) value(1, 0,
 Insert into ItemGroup (groupBig, groupMiddle, groupSmall, groupName) value(1, 1, 0, '상의');
 Insert into ItemGroup (groupBig, groupMiddle, groupSmall, groupName) value(1, 1, 1, '블라우스');
 Insert into ItemGroup (groupBig, groupMiddle, groupSmall, groupName) value(1, 2, 0, '하의');
+
+# 200108 추가됨
+Insert into ItemGroup (groupBig, groupMiddle, groupSmall, groupName) value(1, 2, 1, '치마');
+Insert into ItemGroup (groupBig, groupMiddle, groupSmall, groupName) value(1, 2, 2, '바지');
+Insert into ItemInfo (groupCode, itemName, itemPrice) value(3, "분홍 블라우스", 31000);
+Insert into ItemInfo (groupCode, itemName, itemPrice) value(4, "검은 반바지", 20000);

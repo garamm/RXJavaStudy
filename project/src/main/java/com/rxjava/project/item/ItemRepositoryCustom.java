@@ -7,6 +7,6 @@ import java.util.List;
 @Repository
 public interface ItemRepositoryCustom {
 
-    List<Item> findItem(String groupLevel, int groupKey);
+    List<Item> findItem(int groupKey);
 
 }

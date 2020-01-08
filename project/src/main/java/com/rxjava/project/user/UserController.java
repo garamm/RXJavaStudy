@@ -1,6 +1,5 @@
 package com.rxjava.project.user;
 
-import com.rxjava.project.util.ErrorHandler;
 import com.rxjava.project.util.ResultDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/user")
-public class UserController extends ErrorHandler {
+public class UserController {
 
     @Autowired
     UserService service;

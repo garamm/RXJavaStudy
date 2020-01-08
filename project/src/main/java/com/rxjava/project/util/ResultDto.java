@@ -1,5 +1,6 @@
 package com.rxjava.project.util;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,5 +12,6 @@ public class ResultDto {
 
     int status;
     String message;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     Object data;
 }
