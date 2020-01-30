@@ -1,0 +1,73 @@
+Observable클래스
+옵저버패턴 구현
+옵저버패턴 : 객체의 상태 변화를 관찰,상태변화가 있을때 메서드 호출
+Rxjava의 옵저버블
+onNext:옵저버블이 데이터의 발행을 완료했음을 알림
+onComplete:모든 데이터의 발행을 완료했을때
+onError:에러발생
+옵저버블은 인스턴스 만들지않고 팩토리함수호출
+함수 : create(),just(),from(),fromArray(),fromIterable(),fromCallablee(),fromFuture(),fromPublisher(),interval(),range(),timer(),defer()
+just() :
+인자로 넣은 데이터를 발행하기위해 Observable생성,인자값 최대10개,타입 같아야함
+subscribe()
+사전에 정의해둔 동작들을 실행시키는 함수, 서브스크립을 호출해야 실제로 데이터 발행
+인자가 0개인경우 : onError이벤트시 익셉션던짐,테스트나 디버깅할때 씀
+인자가 1개인경우 : onNext이벤트 처리,onError발생시 익셉션던짐
+인자가 2개인경우 : onNext,onError이벤트 처리
+인자가 3개인경우 : onNext,onError,onComplete 처리
+create()
+onNext,onComplete,onError 알림을 개발자가 직접해야함
+왠만하면 쓰지말고 just같은거 써라(구독해지했을때 콜백 직접다없애야함)
+fromArray()
+배열에 들어있는 데이터 옵저버블로 만들때씀
+FromCallabel()
+Callable객체 : run()메서드가있는 러너블인터페이스랑 비슷, 다른점은 결과값을 리턴함
+callable객체를 옵저버블로만들때씀
+fromInterable()
+콜렉션타입으로 데이터 옵저버블로만들때씀(ArrayList같은애들쓸때,제일많이씀)
+Array list,arrayBlockingQueue,HashSet,LinkedList,Stack,TreeSet,Vector 등에서씀 
+fromFuture()
+callable이랑 비슷한대 get()메서드 호출하면 계산결과나올때까지 블로킹됌
+fromPublisher()
+뭐하는앤지 잘모르겠슴
+Single클래스
+데이터를 무한하게 발행할수있는 Observable과 다르게 오직 1개의 데이터만 발행할수있음, 유일한 결과를 갖는 서버API를 호출할때 유용하게 사용
+데이터 한게를 발행과 동시에 종료됨 onSuccess() == onNext + onComplete
+옵저버블처럼 just,subscribe으로 호출해서 데이터발행
+옵저버블의 특수한 형태이므로 옵저버블로 변환할수 있음.
+옵저버블이 여러개의 데이터를 갖고있을경우에도 변환가능 but 하나 발행하면 success되고 끝남
+옵저버블에서 값이 발행되지않을때도 기본값을 갖는 Single객체로 변환가능
+Maybe클래스
+	- Single클래스처럼 1개만하고 바로완료 하거나 발생안하고도 완료시킬수있음 따라서 Single + onComplete 라고 생각하면됨
+	- 생성자로 elementAt(),firstElement(),flatMapMaybe(),lastElement(),reduce(),singleElement() 등이 있다.
+뜨거운 Observable
+	- 구독자가 존재 여부와 관계없이 데이터를 발행, 여러 구독자를 고려할수있다.구독자가 옵저버블에서 발행하는 데이터를 처음부터 모두 수신한다는 보장 X
+	- 주식가격,습도 센서의 데이터처리 등
+ 	- 배압을 고려해야함(옵저버블에서 데이터를 발행하는 속도와 구독자가 처리하는 속도 차이가 클때 발생)
+차가운 Observable
+	- 일반적인 Observable
+	- subscribe()함수를 호출하여 구독하지 않는이상 데이터 발행 X
+	- 웹 요청,쿼리등
+Subject클래스
+	- 차가운 옵저버블을 뜨거운 옵저버블로 바꿔줌
+	- 옵저버블의 속성과 구독자의 속성이 모두 있다.
+	- AyncSubject,BehaviorSubject,publishSubject,replaySubject등이 있다.
+	- AsyncSubject :
+		-옵저버블에서 발행한 마지막 데이터를 얻어올수있는 클래스, 완료되기전 마지막 데이터에만 관심이 있고 이전 데이터는 무시.
+	- BehaviorSubject:
+		- 구독자가 구독을하면 가장 최근 값 혹은 기본값을 넘겨주는 클래스
+		- create가아니라 createDefault로 생성 -> 그전까지 발행한값이없으면 default로발행해야해서
+	- PublishSubject
+		- 오직 해당 시간에 발생한 데이터를 그대로 구독자에게 전달
+		- 기본값이 없으므로 crate()로 생성
+	- ReplaySubject:
+		- 구독자가 새로 생기면 항상 데이터의 처음부터 끝까지 발행하는 것을 보장해줌(마치 차가운Observable처럼)
+		- 모든 데이터 내용을 저장해둬야하므로 메모리 누수발생가능
+데이터 발행자 : Observable,Single,Maybe,Subject,Completable
+데이터 수신자 : 구독자,옵저버,소비자
+ConnectableObservable 클래스
+	- Subject클래스 처럼 차가운 옵저버블을 뜨거운 옵저버블로 변환
+	- 옵저버블을 여러 구독자에게 공유할수 있으므로 원 데이터 하나를 여러 구독자에게 동시에 전달할 때 사용
+	- subscribe()함수를 호출해도 아무동작 일어나지 않음
+	- connect()함수는 호출한 시점부터 subscribe() 함수를 호출한 구독자에게 데이터를 데이터를 발행하기 때문
+	- stomp에서 사용함
