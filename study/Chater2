@@ -1,0 +1,145 @@
+package com.bottletasteinc.rxjavastudy;
+
+
+import java.util.ArrayList;
+import java.util.concurrent.Callable;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.Single;
+import io.reactivex.subjects.AsyncSubject;
+import io.reactivex.subjects.BehaviorSubject;
+import io.reactivex.subjects.ReplaySubject;
+
+public class Chapter2 {
+
+
+    public void just(){
+        Observable.just(1,2,3,4,5,6)
+                .subscribe(System.out::println);
+
+        // - 인자로 넣은 데이터를 발행하기위해 Observable생성,인자값 최대10개,타입 같아야함
+
+    }
+
+
+    public void create(){
+        Observable<Integer> source = Observable.create((ObservableEmitter<Integer> emitter) -> {
+            emitter.onNext(100);
+            emitter.onNext(200);
+            emitter.onNext(300);
+            emitter.onComplete();
+        });
+        source.subscribe(System.out::println);
+        // - next,complete등 직접호출
+        // subscribe을 호출하지않으면 작동 X
+
+    }
+
+    public void fromArray(){
+        Integer[] arr = {100,200,300,400};
+        Observable<Integer> source = Observable.fromArray(arr);
+        source.subscribe(System.out::println);
+    }
+
+    public void fromIterable(){
+        ArrayList<String> arrayList = new ArrayList<>();
+        arrayList.add("hi");
+        arrayList.add("hi2");
+        arrayList.add("hi3");
+        arrayList.add("hi4");
+        Observable<String> source = Observable.fromIterable(arrayList);
+        source.subscribe(System.out::println);
+    }
+
+    public void fromCallable(){
+        Callable<String> callable = () -> {
+            Thread.sleep(1000);
+            return "Hello Callable";
+        };
+
+        Observable<String> source = Observable.fromCallable(callable);
+        source.subscribe(System.out::println);
+    }
+
+    public void single(){
+        Observable<String> source = Observable.just("Hello Single");
+        Single.fromObservable(source).subscribe(System.out::println);
+        //observable -> single
+
+        Observable.just("hellow Single").single("default item").subscribe(System.out::println);=
+        //single함수를 호출해 Single 객체 생성
+
+        String[] colors = {"Red","Blue","Gold"};
+        Observable.fromArray(colors)
+                .first("default Value")
+                .subscribe(System.out::println);
+        //first함수를 호출해 Single 객체 생성
+
+        Observable.empty().single("default value").subscribe(System.out::println);
+        //empty Observable에서 Single 객체 생성하기.
+
+        Observable.just(new Order("ORD-1"), new Order("ORD-2")).take(1).single(new Order("default Order"))
+                .subscribe(System.out::println);
+        //take() 함수에서 Single 객체 생성하기
+    }
+
+    public void AsyncSubject()
+    {
+        AsyncSubject<String> subject = AsyncSubject.create();
+        subject.subscribe(data -> System.out.println("Subscriber #1 => " + data));
+        subject.onNext("1");
+        subject.onNext("3");
+        subject.subscribe(data -> System.out.println("Subscriber #2 => " + data));
+        subject.onNext("5");
+        subject.onComplete();
+        //subscriver 1,2둘다 5만 리턴
+
+        Float[] temperature = {10.1f,13.4f,12.5f};
+        Observable<Float> source = Observable.fromArray(temperature);
+        AsyncSubject<Float> subject1 = AsyncSubject.create();
+        subject1.subscribe(data -> System.out.println("Subscriber #1 => " + data));
+        source.subscribe(subject1);
+        //구독자로도 동작할수있다.
+    }
+
+    public void BehaviorSubject()
+    {
+        BehaviorSubject<String> subject = BehaviorSubject.createDefault("6");
+        subject.subscribe(data -> System.out.println("Subscriber #1 => " + data));
+        subject.onNext("1");
+        subject.onNext("3");
+        subject.subscribe(data -> System.out.println("Subscriber #2 => " + data));
+        subject.onNext("5");
+        subject.onComplete();
+    }
+
+    public void replaySubject()
+    {
+        ReplaySubject<String> subject = ReplaySubject.create();
+        subject.subscribe(data -> System.out.println("Subscriber #1 => " + data));
+        subject.onNext("1");
+        subject.onNext("3");
+        subject.subscribe(data -> System.out.println("Subscriber #2 => " + data));
+        subject.onNext("5");
+        subject.onComplete();
+    }
+
+
+    class Order
+    {
+        String order;
+
+        Order(String order)
+        {
+            this.order = order;
+        }
+
+        @Override
+        public String toString()
+        {
+            return "Order ID: " + order;
+        }
+    }
+
+}
